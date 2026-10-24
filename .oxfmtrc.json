@@ -6,5 +6,6 @@
   "endOfLine": "lf",
   "insertFinalNewline": true,
   "proseWrap": "preserve",
-  "sortPackageJson": true
+  "sortPackageJson": true,
+  "ignorePatterns": ["*/index.html", "src/assets/**", "pnpm-lock.yaml"]
 }

@@ -1,0 +1,397 @@
+/*
+ * The part of WolfStar.rocks' stylesheet that its error page reads, rebuilt
+ * without Nuxt: Tailwind and DaisyUI at the site's versions, the Nuxt UI tokens
+ * behind `text-muted`, `bg-default` and the rest, and the themes from the
+ * site's `app/assets/css/main.css`. The DaisyUI theme blocks are copied as the
+ * site declares them, so the cascade resolves to the same values it does there.
+ *
+ * The page markup lives in `template.js` and `pages.js`, so Tailwind scans
+ * those two files and nothing else.
+ */
+@import "tailwindcss" source(none);
+@source "./template.js";
+@source "./pages.js";
+
+/* ---------------------------------------------------------------------------
+   Nuxt UI 4.12: `src/runtime/index.css` and the generated `ui.css`, limited to
+   the tokens the error page uses.
+   --------------------------------------------------------------------------- */
+
+@custom-variant light (&:where(.light, .light *));
+
+@layer theme {
+  :root {
+    --ui-header-height: 4rem;
+    --ui-radius: 0.25rem;
+    --ui-container: 80rem;
+  }
+}
+
+@theme default inline {
+  --radius-xs: calc(var(--ui-radius) * 0.5);
+  --radius-sm: var(--ui-radius);
+  --radius-md: calc(var(--ui-radius) * 1.5);
+  --radius-lg: calc(var(--ui-radius) * 2);
+  --radius-xl: calc(var(--ui-radius) * 3);
+  --radius-2xl: calc(var(--ui-radius) * 4);
+  --radius-3xl: calc(var(--ui-radius) * 6);
+  --text-color-dimmed: var(--ui-text-dimmed);
+  --text-color-muted: var(--ui-text-muted);
+  --text-color-toned: var(--ui-text-toned);
+  --text-color-default: var(--ui-text);
+  --text-color-highlighted: var(--ui-text-highlighted);
+  --text-color-inverted: var(--ui-text-inverted);
+  --background-color-default: var(--ui-bg);
+  --background-color-muted: var(--ui-bg-muted);
+  --background-color-elevated: var(--ui-bg-elevated);
+  --background-color-accented: var(--ui-bg-accented);
+  --background-color-inverted: var(--ui-bg-inverted);
+  --border-color-default: var(--ui-border);
+  --border-color-muted: var(--ui-border-muted);
+  --border-color-accented: var(--ui-border-accented);
+  --border-color-inverted: var(--ui-border-inverted);
+  --ring-color-default: var(--ui-border);
+  --ring-color-muted: var(--ui-border-muted);
+  --ring-color-accented: var(--ui-border-accented);
+  --ring-color-inverted: var(--ui-border-inverted);
+  --outline-color-default: var(--ui-border);
+  --outline-color-inverted: var(--ui-border-inverted);
+}
+
+@layer base {
+  body {
+    @apply antialiased text-default bg-default scheme-light dark:scheme-dark;
+  }
+
+  a:focus-visible {
+    outline-offset: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Site: app/assets/css/main.css
+   --------------------------------------------------------------------------- */
+
+/*
+ * With JavaScript off the html element carries no theme, so these variants
+ * resolve that state from the system preference, the way the site does.
+ */
+@custom-variant theme-light {
+  &:where([data-theme="light"], [data-theme="light"] *, .light, .light *) {
+    @slot;
+  }
+
+  @media (prefers-color-scheme: light) {
+    &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
+      @slot;
+    }
+  }
+}
+
+@custom-variant theme-dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *) {
+    @slot;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
+      @slot;
+    }
+  }
+}
+
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *) {
+    @slot;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
+      @slot;
+    }
+  }
+}
+
+/*
+ * No "light" theme block here, on purpose. The site declares one, but in its
+ * compiled CSS DaisyUI's built-in light theme sits behind
+ * `:is(:root:has(input.theme-controller[value="light"]:checked), [data-theme="light"])`,
+ * which outranks the site's `[data-theme="light"]`. Visitors therefore see
+ * DaisyUI's own light values (primary oklch(45% 0.24 277.023), 1px borders),
+ * and so do these pages. Restore the block when the site's light theme applies.
+ */
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: oklch(25% 0.016 252);
+  --color-base-200: oklch(23% 0.014 253);
+  --color-base-300: oklch(20% 0.012 254);
+  --color-base-content: oklch(90% 0 0);
+  --color-primary: oklch(58% 0.233 277.117);
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: oklch(0.5873 0.0204 272.13);
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: oklch(60% 0.152 181.912);
+  --color-accent-content: oklch(100% 0 0);
+  --color-neutral: oklch(14% 0.005 285.823);
+  --color-neutral-content: oklch(100% 0 0);
+  --color-info: oklch(55% 0.16 232.661);
+  --color-info-content: oklch(89.04% 0.062 264.052);
+  --color-success: oklch(76% 0.177 163.223);
+  --color-success-content: oklch(37% 0.077 168.94);
+  --color-warning: oklch(82% 0.189 84.429);
+  --color-warning-content: oklch(41% 0.112 45.904);
+  --color-error: oklch(71% 0.194 13.428);
+  --color-error-content: oklch(28% 0.109 3.907);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.21875rem;
+  --border: 1.5px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "midnight";
+  default: false;
+  prefersdark: false;
+  color-scheme: "dark";
+  --color-base-100: oklch(0% 0 0);
+  --color-base-200: oklch(10% 0 0);
+  --color-base-300: oklch(27% 0 0);
+  --color-base-content: oklch(87.609% 0 0);
+  --color-primary: oklch(58% 0.233 277.117);
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: oklch(0.5873 0.0204 272.13);
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: oklch(60% 0.152 181.912);
+  --color-accent-content: oklch(100% 0 0);
+  --color-neutral: oklch(14% 0.005 285.823);
+  --color-neutral-content: oklch(100% 0 0);
+  --color-info: oklch(55% 0.16 232.661);
+  --color-info-content: oklch(89.04% 0.062 264.052);
+  --color-success: oklch(76% 0.177 163.223);
+  --color-success-content: oklch(37% 0.077 168.94);
+  --color-warning: oklch(82% 0.189 84.429);
+  --color-warning-content: oklch(41% 0.112 45.904);
+  --color-error: oklch(71% 0.194 13.428);
+  --color-error-content: oklch(28% 0.109 3.907);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.21875rem;
+  --border: 1.5px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+}
+
+/* Nuxt UI theme variable overrides, in Nuxt UI's own layer so they win by order. */
+@layer theme {
+  [data-theme="light"],
+  :root {
+    --ui-text-dimmed: var(--color-neutral-600);
+    --ui-text-muted: var(--color-neutral-800);
+    --ui-text-toned: var(--color-neutral-900);
+    --ui-text: black;
+    --ui-text-highlighted: black;
+    --ui-text-inverted: var(--color-white);
+
+    --ui-bg: var(--color-base-300);
+    --ui-bg-muted: var(--color-neutral-50);
+    --ui-bg-elevated: var(--color-neutral-100);
+    --ui-bg-accented: var(--color-neutral-200);
+    --ui-bg-inverted: var(--color-neutral-900);
+
+    --ui-border: var(--color-base-100);
+    --ui-border-muted: var(--color-base-200);
+    --ui-border-accented: var(--color-base-200);
+    --ui-border-inverted: var(--color-neutral-900);
+
+    --ui-radius: var(--radius-box);
+    --ui-container: var(--container-7xl);
+  }
+
+  :root {
+    @variant theme-dark {
+      --ui-text-dimmed: var(--color-neutral-500);
+      --ui-text-muted: var(--color-neutral-400);
+      --ui-text-toned: var(--color-neutral-300);
+      --ui-text: var(--color-neutral-200);
+      --ui-text-highlighted: var(--color-white);
+      --ui-text-inverted: var(--color-neutral-900);
+
+      --ui-bg: var(--color-base-300);
+      --ui-bg-muted: var(--color-neutral-800);
+      --ui-bg-elevated: var(--color-neutral-800);
+      --ui-bg-accented: var(--color-neutral-700);
+      --ui-bg-inverted: var(--color-white);
+
+      --ui-border: var(--color-base-100);
+      --ui-border-muted: var(--color-base-200);
+      --ui-border-accented: var(--color-base-200);
+      --ui-border-inverted: var(--color-white);
+
+      --ui-radius: var(--radius-box);
+      --ui-container: var(--container-7xl);
+    }
+  }
+
+  [data-theme="midnight"],
+  .midnight {
+    --ui-text-dimmed: var(--color-neutral-500);
+    --ui-text-muted: var(--color-neutral-400);
+    --ui-text-toned: var(--color-neutral-300);
+    --ui-text: var(--color-neutral-200);
+    --ui-text-highlighted: var(--color-white);
+    --ui-text-inverted: var(--color-neutral-900);
+
+    --ui-bg: var(--color-base-100);
+    --ui-bg-muted: var(--color-base-200);
+    --ui-bg-elevated: var(--color-base-200);
+    --ui-bg-accented: var(--color-base-300);
+    --ui-bg-inverted: var(--color-white);
+
+    --ui-border: var(--color-base-200);
+    --ui-border-muted: var(--color-base-200);
+    --ui-border-accented: var(--color-base-300);
+    --ui-border-inverted: var(--color-white);
+
+    --ui-radius: var(--radius-box);
+    --ui-container: var(--container-7xl);
+  }
+}
+
+@theme {
+  --font-geist: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --default-font-family: var(--font-geist);
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-base-200, currentColor);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Site: app/assets/css/color-themes.css. Discord's darker "Dark" shade, which
+   the site marks with `data-shade="dark"`.
+   --------------------------------------------------------------------------- */
+
+:root[data-shade="dark"][data-theme="dark"] {
+  --color-base-100: lab(13.73% 0.3 -2.85);
+  --color-base-200: lab(9.39% 0.8 -2.79);
+  --color-base-300: lab(5.52% 0.32 -1.19);
+}
+
+/* ---------------------------------------------------------------------------
+   Site: app/assets/css/utilities.css
+   --------------------------------------------------------------------------- */
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+}
+
+@utility btn-glow {
+  position: relative;
+  transition: all 0.3s ease;
+
+  &::before {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+    filter: blur(12px);
+    transition: opacity 0.3s ease;
+    inset: -2px;
+    border-radius: inherit;
+    background: var(--color-neutral);
+    content: "";
+  }
+
+  &:hover::before {
+    opacity: 0.6;
+  }
+
+  &.btn-primary::before {
+    background: var(--color-primary);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Site: app/layouts/default.vue. The page and the indigo glow at its top.
+   --------------------------------------------------------------------------- */
+
+.app-layout {
+  @apply flex min-h-screen flex-col;
+  position: relative;
+  background-color: var(--color-base-100);
+  overflow-x: clip;
+  --color: var(--color-primary);
+}
+
+.app-layout::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, oklch(from var(--color) l c h / 0.2) 0%, transparent 80%),
+    linear-gradient(to bottom, var(--color-base-100) 0%, transparent 20%);
+  background-size:
+    max(100vw, 600px) 50rem,
+    100% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  content: "";
+}
+
+/* ---------------------------------------------------------------------------
+   Cloudflare's own detail. `::CLOUDFLARE_ERROR_500S_BOX::` and its 1000-class
+   twin insert markup this file does not control, so it is styled by element.
+   --------------------------------------------------------------------------- */
+
+.cf-detail :where(h1, h2, h3, h4) {
+  font-size: inherit;
+  font-weight: 600;
+  color: var(--ui-text-highlighted);
+}
+
+.cf-detail :where(p, ul, ol) {
+  margin-top: 0.25rem;
+}
+
+.cf-detail :where(ul, ol) {
+  list-style: none;
+  padding: 0;
+}
+
+.cf-detail :where(a) {
+  text-decoration: underline;
+}
