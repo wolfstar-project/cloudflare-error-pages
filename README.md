@@ -44,6 +44,7 @@ pnpm build
 ✓ direct_ip/index.html            115.9 KB
 ✓ not_found/index.html            114.8 KB
 ✓ forbidden/index.html            115.9 KB
+✓ challenge/index.html            115.8 KB
 ✓ too_many_requests/index.html    116.0 KB
 ✓ cloudflare_errors/index.html    115.9 KB
 ✓ borked/index.html               115.9 KB
@@ -61,17 +62,18 @@ show "5xx" and "1xxx" instead of a code.
 
 ## Pages and where they go
 
-| Directory             | Cloudflare setting                              | Status code shown       | Cloudflare fills in                                         |
-| --------------------- | ----------------------------------------------- | ----------------------- | ----------------------------------------------------------- |
-| `unauthorized`        | A custom error rule for 401 responses           | 401                     | the Ray ID                                                  |
-| `forbidden`           | Error Pages: "WAF block" and "IP/Country block" | 403                     | the Ray ID                                                  |
-| `not_found`           | A custom error rule for origin 404 responses    | 404                     | nothing                                                     |
-| `direct_ip`           | A custom error rule for direct-IP traffic       | 421                     | the Ray ID                                                  |
-| `too_many_requests`   | Error Pages: "Rate limiting block"              | 429                     | the Ray ID                                                  |
-| `cloudflare_errors`   | Error Pages: "1000 class errors"                | the error's 1xxx code   | its error details, through `::CLOUDFLARE_ERROR_1000S_BOX::` |
-| `borked`              | Error Pages: "500 class errors"                 | the response's 5xx code | its error details, through `::CLOUDFLARE_ERROR_500S_BOX::`  |
-| `bad_gateway`         | A custom error rule for origin 502 responses    | 502                     | the Ray ID                                                  |
-| `service_unavailable` | A custom error rule for origin 503 responses    | 503                     | the Ray ID                                                  |
+| Directory             | Cloudflare setting                                                                                            | Status code shown       | Cloudflare fills in                                         |
+| --------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- | ----------------------------------------------------------- |
+| `unauthorized`        | A custom error rule for 401 responses                                                                         | 401                     | the Ray ID                                                  |
+| `forbidden`           | Error Pages: "WAF block" and "IP/Country block"                                                               | 403                     | the Ray ID                                                  |
+| `challenge`           | Error Pages: "Interactive challenge", "IP/Country challenge", and "Managed challenge / I'm Under Attack Mode" | 403                     | the challenge, through `::CAPTCHA_BOX::`                    |
+| `not_found`           | A custom error rule for origin 404 responses                                                                  | 404                     | nothing                                                     |
+| `direct_ip`           | A custom error rule for direct-IP traffic                                                                     | 421                     | the Ray ID                                                  |
+| `too_many_requests`   | Error Pages: "Rate limiting block"                                                                            | 429                     | the Ray ID                                                  |
+| `cloudflare_errors`   | Error Pages: "1000 class errors"                                                                              | the error's 1xxx code   | its error details, through `::CLOUDFLARE_ERROR_1000S_BOX::` |
+| `borked`              | Error Pages: "500 class errors"                                                                               | the response's 5xx code | its error details, through `::CLOUDFLARE_ERROR_500S_BOX::`  |
+| `bad_gateway`         | A custom error rule for origin 502 responses                                                                  | 502                     | the Ray ID                                                  |
+| `service_unavailable` | A custom error rule for origin 503 responses                                                                  | 503                     | the Ray ID                                                  |
 
 The directory names are the ones this repository has always served its pages under, so existing Cloudflare assets
 keep their URLs.
@@ -79,8 +81,13 @@ keep their URLs.
 Error Pages and custom error rules need a Pro plan or higher
 ([Cloudflare's custom errors](https://developers.cloudflare.com/rules/custom-errors/)). Error Pages do not replace
 origin 500, 501, 503, or 505 responses; custom error rules can. Cloudflare sends 1000 class errors with another
-HTTP status, so `cloudflare_errors` reads the 1xxx code from Cloudflare's details. The challenge types have no
-page here, so Cloudflare keeps its own design for them.
+HTTP status, so `cloudflare_errors` reads the 1xxx code from Cloudflare's details.
+
+Use `challenge/index.html` for the challenge types that require `::CAPTCHA_BOX::`, not `forbidden/index.html`:
+the latter is for blocks and has no challenge token. Cloudflare replaces the token with its challenge before
+serving the page. The build requires it exactly once, and local previews hide the unfilled token. Non-interactive
+challenges require `::IM_UNDER_ATTACK_BOX::` and still use Cloudflare's own page. See
+[Cloudflare's required error tokens](https://developers.cloudflare.com/rules/custom-errors/reference/error-tokens/).
 
 ## Publish to Cloudflare
 

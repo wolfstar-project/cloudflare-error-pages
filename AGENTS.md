@@ -26,7 +26,7 @@ page, rendered from one template (`src/template.js`) per entry in `src/pages.js`
   origin may be down. The build fails on any outside resource.
 - **Page scripts are plain ES5 inside a `try`.** They run before the first paint on any browser that hits an error.
 - **The language comes from the site's choice, never the browser.** The site does not read the browser's language.
-- `borked` and `cloudflare_errors` must keep their Cloudflare error token exactly once. Cloudflare rejects them without it.
+- `borked`, `cloudflare_errors`, and `challenge` must keep their Cloudflare error token exactly once. Cloudflare rejects them without it.
 
 ## Traps
 
