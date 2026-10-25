@@ -77,6 +77,14 @@ export const PAGES = [
     title: "errors.access_denied",
   },
   {
+    description: "errors.generic_description",
+    detail: "::CAPTCHA_BOX::",
+    directory: "challenge",
+    state: "other",
+    status: "403",
+    title: "errors.access_denied",
+  },
+  {
     description: "errors.too_many_requests_description",
     detail: "ray",
     directory: "too_many_requests",
